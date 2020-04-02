@@ -6,7 +6,7 @@ const Footer = () => {
   return (
     <footer>
       <Container>
-        <p>&copy; { new Date().getFullYear() }, My Gatsby Site</p>
+        <p>Built using Gatsby by Sahil Makwane (github.com/SMak06), 2 April 2020</p>
       </Container>
     </footer>
   );
