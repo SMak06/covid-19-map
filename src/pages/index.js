@@ -1,10 +1,14 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import L from 'leaflet';
-import axios from 'axios';
+import axios from 'axios'; //for Http requests
 import Layout from 'components/Layout';
 import Container from 'components/Container';
 import Map from 'components/Map';
+
+//THIS APPLICATION USES CORONAVIRUS TRACKER API TO MAP OUT CASES BASED ON COUNTRIES ACROSS THE GLOBE
+
+
 
 const LOCATION = {
   lat: 0,
@@ -26,7 +30,7 @@ const IndexPage = () => {
     if (!map) {
       return;
     }
-    let response;
+    let response; //to store responses
     try {  //try/catch to get over API errors
 
       response = await axios.get('https://corona.lmao.ninja/countries');
@@ -37,16 +41,16 @@ const IndexPage = () => {
       return;
 
     }
-    const { data = [] } = response;
-    const hasData = Array.isArray(data) && data.length > 0;
+    const { data = [] } = response;  //destructuring data into 'data' array
+    const hasData = Array.isArray(data) && data.length > 0; //checks that data is available or not
 
-    if ( !hasData ) return;
+    if ( !hasData ) return; //returns if data is inaccessible
 
     const geoJson = {
       type: 'FeatureCollection',
       features: data.map((country = {}) => {
         const { countryInfo = {} } = country;
-        const { lat, long: lng } = countryInfo;
+        const { lat, long: lng } = countryInfo; //gets lats/long for countries
         return {
           type: 'Feature',
           properties: {
@@ -61,13 +65,13 @@ const IndexPage = () => {
     }
 
 
-    const geoJsonLayers = new L.GeoJSON(geoJson, {
-      pointToLayer: (feature = {}, latlng) => {
+    const geoJsonLayers = new L.GeoJSON(geoJson, {  //transforming data into geographic format, as fed into Leaflet
+      pointToLayer: (feature = {}, latlng) => { //to customize Leaflet map layers
         const { properties = {} } = feature;
         let updatedFormatted;
         let casesString;
 
-        const {
+        const {  
           country,
           updated,
           cases,
@@ -78,17 +82,18 @@ const IndexPage = () => {
         casesString = `${cases}`;
 
         if ( cases > 1000 ) {
-          casesString = `${casesString.slice(0, -3)}k+`
+          casesString = `${casesString.slice(0, -3)}k+`  //converts 1000 to 1k and so on for easier visibility.
         }
 
         if ( updated ) {
           updatedFormatted = new Date(updated).toLocaleString();
         }
-
+        
+        //basic template for the output pop-up
         const html = `
           <span class="icon-marker">
             <span class="icon-marker-tooltip">
-              <h2>${country}</h2>
+              <h2>${country}</h2>  
               <ul>
                 <li><strong>Confirmed:</strong> ${cases}</li>
                 <li><strong>Deaths:</strong> ${deaths}</li>
@@ -102,10 +107,10 @@ const IndexPage = () => {
 
         return L.marker( latlng, {
           icon: L.divIcon({
-            className: 'icon',
+            className: 'icon', //icon is the marker
             html
           }),
-          riseOnHover: true
+          riseOnHover: true //to make selected marker rise above others
         });
       }
     });
@@ -132,9 +137,9 @@ const IndexPage = () => {
 
       <Container type="content" className="text-center home-start">
         <h2>Global tracking for COVID-19 cases: Confirmed, Deaths & Recovery</h2>
-        <p>Sourcing data from <a href="github.com/ExpDev07/coronavirus-tracker-api">ExpDev07's Coronavirus Tracker API</a>, based on:</p>
-        <p><a href= "github.com/CSSEGISandData/COVID-19">JHS</a> - Worldwide Data repository operated by the Johns Hopkins University Center for Systems Science and Engineering (JHU CSSE).</p>
-        <p>and <a href="csbs.org/information-covid-19-coronavirus">CSBS</a> - U.S. County data that comes from the Conference of State Bank Supervisors.</p>
+        <p>Sourcing data from <a href="https://github.com/novelcovid/api">NovelCOVID API</a>, based on:</p>
+        <p><a href= "https://www.worldometers.info/coronavirus/">https://www.worldometers.info/coronavirus</a> and,</p>
+        <p><a href="https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series">https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data/csse_covid_19_time_series</a></p>
       </Container>
     </Layout>
   );
