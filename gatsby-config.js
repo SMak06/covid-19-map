@@ -10,11 +10,6 @@ module.exports = {
         path: `${__dirname}/src/assets/images`
       }
     },
-    'gatsby-plugin-react-leaflet',
-    'gatsby-plugin-sharp',{
-      options: {
-        icon: 'src/assets/images/favicon.ico',
-      },
-    }
+    'gatsby-plugin-react-leaflet'
   ]
 };
