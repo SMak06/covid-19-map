@@ -1,4 +1,4 @@
-# Map, tracking confirmed cases, deaths and recoveries from COVID-19
+# Map application showing COVID-19 confirmed cases, deaths and recoveries in countries across the globe.
 
 Build in React using Gatsby and Leaflet, hosted using Netlify.
 
