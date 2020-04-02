@@ -10,7 +10,7 @@ import Map from 'components/Map';
 
 
 
-const LOCATION = {
+const LOCATION = { //0,0 centers the view of the map on load
   lat: 0,
   lng: 0
 };
