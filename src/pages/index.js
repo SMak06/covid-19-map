@@ -33,7 +33,7 @@ const IndexPage = () => {
     let response; //to store responses
     try {  //try/catch to get over API errors
 
-      response = await axios.get('https://corona.lmao.ninja/countries');
+      response = await axios.get('https://corona.lmao.ninja/v2/countries');
 
     } catch (e) {  //if request fails we console log out the error and return 
 
